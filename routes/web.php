@@ -14,7 +14,16 @@ use App\Http\Controllers\RegistrationController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Auth::routes();
 
+Route::get('/home', 'HomeController@index')->name('home');
+
+//↓管理者ページ
+Route::get('/login/admin', 'Auth\LoginController@showAdminLoginForm');
+Route::get('/register/admin', 'Auth\RegisterController@showAdminRegisterForm');
+
+Route::post('/login/admin', 'Auth\LoginController@adminLogin');
+Route::post('/register/admin', 'Auth\RegisterController@createAdmin');
+
+Route::view('/home', 'user.home')->middleware('auth');
+Route::view('/admin', 'admin.admin');

@@ -13,6 +13,7 @@
                     <form method="POST" action='{{ url("login/$url") }}' aria-label="{{ __('Login') }}">
                         @csrf
 
+                        <!-- 名前の入力 -->
                         <div class="form-group row">
                             <label for="name" class="col-sm-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
@@ -26,7 +27,9 @@
                                 @endif
                             </div>
                         </div>
+                        <!-- 名前の入力 -->
 
+                        <!-- パスワードの入力 -->
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
@@ -40,6 +43,8 @@
                                 @endif
                             </div>
                         </div>
+                        <!-- パスワードの入力 -->
+                        
                     @else
                     <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
                         @csrf

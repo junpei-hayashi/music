@@ -1,3 +1,36 @@
+@extends('layouts.artist')
+
+@section('content')
+<main class="py-4">
+        <div class="col-md-5 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class='text-center'>アーティスト名</h1>
+                </div>
+                <!-- <div class="panel-body">
+                    @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach($errors->all() as $msg)
+                            <li>{{ $msg }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+                </div>     -->
+                <div class="card-body">
+                    <div class="card-body">
+                        <form action="{{ route('create.artist')}}" method="post">
+                            @csrf
+                            <label for='artist_name'>
+                                アーティスト名
+                            </label>
+                                <input type='text' class='form-control' name='artist_name' value="{{ old('artist_name')}}"/>
+                 
+                            <label for='artist_detail' class='mt-2'>アーティストの詳細</label>
+                                <textarea class='form-control' name='artist_detail'>{{ old('artist_detail')}}</textarea>
+                           
+
 
 @extends('layouts.general')
 
@@ -9,8 +42,8 @@
 @endif
 <!-- 画像の変更を行ったらここにフラッシュメッセージが出る -->
 <p>マイページ</p>
-    <p>名前:{{ $my_user->name }}</p>
-    <p>メールアドレス:{{ $my_user->email }}</p>
+    <p>名前:{{ $my_user->artist_name }}</p>
+    <p>詳細:{{ $my_user->artist_detail }}</p>
     <p>プロフィール画像:{{ $my_user->user_image }}</p>
 
     @if (Session::has('top_image_pass'))
@@ -44,19 +77,5 @@
             </a>
         </div>
         <!-- ここまで編集 -->
-
-        <!-- ここからアーティスト登録 -->
-        <div class='d-flex justify-content-center artist'>
-            <a href="{{ route('artist.up',['id' => Auth::user()->id]) }}">
-                <button class='btn btn-secondary mx-5'>アーティスト登録</button>
-                                            <!-- ↑マージン左右5pxずらしている -->
-            </a>
-        </div>
-        <!-- ここまでアーティスト登録 -->
-
-        
     </div>
-
-
-
 @endsection

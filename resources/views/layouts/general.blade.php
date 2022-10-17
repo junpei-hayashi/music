@@ -33,7 +33,8 @@
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    ssss
+                    <!-- {{ config('app.name', 'Laravel') }} -->
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -56,6 +57,24 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+
+                                <!-- マイページへ -->
+                                <div class='d-flex justify-content-center mt-3'>
+                                    <a href="{{ route('id.show',['id' => Auth::user()->id]) }}">
+                                
+                                        <button class='btn btn-secondary mx-5'>マイページ</button>
+                                                                    <!-- ↑マージン左右5pxずらしている -->
+                                    </a>
+                                </div>
+
+                                <!-- 曲の投稿画面へ -->
+                                <div class='d-flex justify-content-center mt-3'>
+                                    <a href="{{ route('post.music',['id' => Auth::user()->id]) }}">
+                                
+                                        <button class='btn btn-secondary mx-5'>曲を投稿する</button>
+                                                                    <!-- ↑マージン左右5pxずらしている -->
+                                    </a>
+                                </div>
 
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();

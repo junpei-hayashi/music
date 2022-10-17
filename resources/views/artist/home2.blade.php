@@ -1,4 +1,4 @@
-@extends('layouts.general')
+@extends('layouts.artist')
 
 @section('content')
 <!-- ここから全体 -->

@@ -6,6 +6,15 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
+use App\User;
+use App\Artist;
+use App\Music;
+use App\Like;
+use App\Comment;
+use App\Follow;
+use App\Type;
 
 class My_pageController extends Controller
 {
@@ -46,7 +55,7 @@ class My_pageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
         $id = Auth::id();
         $user = DB::table('users')->find($id);
@@ -63,7 +72,7 @@ class My_pageController extends Controller
     {
         $id = Auth::id();
         $user = DB::table('users')->find($id);
-        return view('user.general_mypage_edit', ['my_user' => $user]);
+        return view('user.general_edit', ['my_user' => $user]);
     }
 
     /**
@@ -91,6 +100,7 @@ class My_pageController extends Controller
 
     public function my_page_update(Request $request)
     {
+
         if($request->hasFile('user_image')) {
             $id = Auth::id();
             $photo_path = $request->file('user_image')->store('public/top_file');
@@ -105,5 +115,42 @@ class My_pageController extends Controller
                 "top_image_pass" => $top_image_pass2 
             ]);
         }
+    }
+
+
+
+    public function artist_update(Request $request)
+    {        
+        $id = Auth::id();
+        $user = DB::table('users')->find($id);
+        return view('artist.artist_up', ['my_user' => $user]); 
+    }
+
+
+
+    public function editGeneral(Request $request)
+    {        
+        $inputs=$request->validate([
+            'name'=>'required|max:255',
+            'email'=>'required|max:255',
+            'tel'=>'required|max:255',
+            'user_image'=>'required|max:255'
+        ]);
+
+        $user=new User();
+        $user->name=$inputs['name'];
+        $user->email=$inputs['email'];
+        $user->tel=$inputs['tel'];
+        $user->id=auth()->user()->id;
+
+        if(request('user_image')) {
+            $name=request()->file('user_image')->getClientOriginalName();
+            $file=request()->file('user_image')->move('storage/images,$name');
+            $user->user_image=$name;
+        }
+
+        $user->save();
+        return back()->with('message','変更をしました');
+        
     }
 }

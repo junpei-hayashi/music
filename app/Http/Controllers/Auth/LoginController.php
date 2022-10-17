@@ -59,4 +59,6 @@ class LoginController extends Controller
         }
         return back()->withInput($request->only('name', 'remember'));
     }
+
+    
 }

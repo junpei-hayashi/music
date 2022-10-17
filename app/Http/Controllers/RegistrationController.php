@@ -21,6 +21,62 @@ class RegistrationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function createArtistForm(Request $request)
+    {
+        $artists = new Artist;
+
+        $types = User::where('type_id', 0)
+        ->where('user_id', Auth::id())->get();
+        // $types = Type::where('category', 0)->get();
+
+        return view('artist/artist_up',[
+            'types'=>$types
+        ]);
+    }
+    
+    public function createArtist(Request $request)
+    {
+        // 一般ユーザーのtype_idを更新
+        $user = User::find(Auth::id());//該当ユーザーのデータ取得、Auth::id()が既にログインユーザーのIDを取得している
+        
+        $user->type_id = 1;//ユーザーのtype_idを0から1へ
+
+        $user -> save();
+        
+        // アーティスト情報を追加
+        $artist = new Artist;
+
+        $artist->user_id = Auth::id();//artistテーブルのカラムuser_idに、ログイン(Auth)しているユーザーのIDを出力
+
+        $columns = ['artist_name', 'artist_detail', 'artist_image',];
+        foreach($columns as $column) {
+            $artist->$column = $request->$column;
+        }
+
+        $artist -> save();
+
+        return redirect('/');
+
+
+        // $types = new User;
+        
+        // $types -> type_id = 1;
+        
+        // $artist = new Artist;
+
+        // $columns = ['artist_name', 'artist_detail','artist_image'];
+        // foreach($columns as $column) {
+        //     $artist->$column = $request->$column;
+        // }
+
+        // Auth::user()->artist()->save($artist);
+
+        // return redirect('/');
+
+
+    }
+    
     public function index()
     {
         //
@@ -76,9 +132,9 @@ class RegistrationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+       //
     }
 
     /**

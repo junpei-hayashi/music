@@ -7,6 +7,9 @@ use App\Http\Requests\CreateData;
 use App\Http\Requests\CreateType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Log;
 use App\User;
 use App\Artist;
 use App\Music;
@@ -25,69 +28,85 @@ class MusicController extends Controller
 
     public function postComplite(Request $request)
     {        
-        $inputs=$request->validate([
-            'music_image'=>'required|max:255',
-            'sound_source'=>'required|max:1600|mimes:mp3,wave,aif,aac,mp4',
-            'music_title'=>'required|max:255',
-            'music_detail'=>'required|max:255'
-        ]);
+        // try {
+        //     DB::beginTransaction();
+            $inputs=$request->validate([
+                'music_title'=>'required|string|max:255',
+                'jenre'=>'required', 'string', 'max:255', 'unique:users',
+                'music_detail'=>'nullable',
+                // 'sound_source'=>'required|max:1024',
+            ]);
+            
+            $music = new Music;
+            $music->artist_id = Auth::id();//musicテーブルのカラムartist_idに、ログイン(Auth)しているユーザーのIDを出力
+            $music->music_title=$inputs['music_title'];
+            $music->jenre=$inputs['jenre'];
+            $music->music_detail=$inputs['music_detail'];
+            $music->music_image=$request->music_image;
+            $music->sound_source=$request->sound_source;
+            
+            if($request->hasFile('music_image')) {
+                $photo_path = $request->file('music_image')->store('public/top_file');
+                $music->music_image = basename($photo_path);
+            }
+            // $path=Storage::putFile('public/music_file',$request->file('sound_source'));
+                $path = $request->file('sound_source')->store('public/music_file');
+                // $music->sound_source = basename($music_path);
+            $music->sound_source = $path;
+            $music->save();
 
-        $music=new Music();
-        $music->music_title=$inputs['music_title'];
-        $music->music_detail=$inputs['music_detail'];
-        $music->artist_id=auth()->user()->id;
+            // DB::commit();
+            // return view('user.general_mypage')->with('message','投稿をしました');
+            return back()->with('message','投稿をしました');
 
-        if(request('music_image')) {
-            $name=request()->file('music_image')->getClientOriginalName();
-            $file=request()->file('music_image')->move('storage/images,$name');
-            $music->music_image=$name;
-        }
+        // } catch (\Exception $e) {
+        //     Log::info($e->getMessage());//エラーメッセージを出力してくれる
+        //     DB::rollback();//コミットしなかった処理を無かったことにする。
+        //     session()->flash('message', '投稿が失敗しました');
+        //     return view('post.post_music')->with('message','投稿をしました');
+        // }
 
-        $music->save();
-        return back()->with('message','投稿しました');
-        
     }
 
-    public function postComplit(Request $request) //リクエストでブラウザから投稿する曲の情報が送られ、その結果を変数のrequestとし使用している
+    // 曲の編集
+    public function editMusic(Request $request)
     {
-        $music = new Music();//モデルMusicのインスタンス化を行い$musicという変数に格納
-
-        // ポストでmusic_imageが送られてきた場合と、送られてこなかった場合を想定するif分
-        if ($file = $request->music_image){
-
-            //$fileNameにはtime関数を使用している.unicstimestampを取得できる。
-            // その後、投稿したファイル名と文字列結合している
-            $fileName = time() . $file->getClientOriginalName();
-
-            // 変数$target_pathには関数public_pathのuploadsと記載している。
-            // 関数public_pathを使用するとexplorerのpublicのパスを取得できる。
-            // その配下にuploadsというファイルを作るパスになっている
-            $target_path = public_path('uploads/');
-
-            // $file->moveの引数に、$target_pathの先ほど指定した画像のディレクトリ、
-            // $fileNameのunicstimestampとファイル名を移動する
-            $file->move($target_path, $fileName);
-        }else {
-            $fileName =null;
-        }
-
-         // ポストでmp3が送られてきた場合と、送られてこなかった場合を想定するif分
-        if ($file = $request->mp3){
-            $fileName = time() . $file->getClientOriginalName();
-            $target_path = public_path('upload/');
-            $file->move($target_path, $fileName);
-        }else {
-            $fileName =null;
-        }
-
-        $music->music_title = $request->input('music_title');
-        $music->music_image = $fileName;
-        $music->mp3 = $fileName;
-        $music->music_detail = $request->input('music_detail');
-        $music->artist_id = Auth::id();//artistテーブルのカラムuser_idに、ログイン(Auth)しているユーザーのIDを出力
-
-        $post->save();
+        $musics = Music::orderBy('id','desc');
+        $artists = Artist::all();
+        $user = Auth::user();       
+        return view('post.music_edit',compact('musics', 'user', 'artists'));
+    }
+    public function editMusicComplite(Request $request)
+    {
+        // try {
+        //     DB::beginTransaction();
+        $inputs=$request->validate([
+            'music_title'=>'required|string|max:255',
+            'jenre'=>'required', 'string', 'max:255', 'unique:users',
+            'music_detail'=>'nullable',
+            // 'sound_source'=>'required|max:1024',
+        ]);
         
-        // return view('post.index_music');
+        $music = new Music;
+        $music->artist_id = Auth::id();//musicテーブルのカラムartist_idに、ログイン(Auth)しているユーザーのIDを出力
+        $music->music_title=$inputs['music_title'];
+        $music->jenre=$inputs['jenre'];
+        $music->music_detail=$inputs['music_detail'];
+        $music->music_image=$request->music_image;
+        $music->sound_source=$request->sound_source;
+        
+        if($request->hasFile('music_image')) {
+            $photo_path = $request->file('music_image')->store('public/top_file');
+            $music->music_image = basename($photo_path);
+        }
+        // $path=Storage::putFile('public/music_file',$request->file('sound_source'));
+            $path = $request->file('sound_source')->store('public/music_file');
+            // $music->sound_source = basename($music_path);
+        $music->sound_source = $path;
+        $music->save();
+
+        // DB::commit();
+        // return view('user.general_mypage')->with('message','投稿をしました');
+        return back()->with('message','投稿をしました');
     }
 }

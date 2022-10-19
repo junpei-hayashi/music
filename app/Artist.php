@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Music;
 
 class Artist extends Model
 {
@@ -12,6 +14,10 @@ class Artist extends Model
 
     public function user() {
         return $this->belongsTo('App\User');
+    }
+
+    public function musics() {
+        return $this->hasMany('Music::class');//ユーザーから見て曲のテーブルは1対多になる
     }
 
 }

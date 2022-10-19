@@ -19,20 +19,21 @@ use App\Http\Controllers\MusicController;
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-
-//↓管理者ページ
-Route::get('/login/admin', 'Auth\LoginController@showAdminLoginForm');
-Route::get('/register/admin', 'Auth\RegisterController@showAdminRegisterForm');
-
-Route::post('/login/admin', 'Auth\LoginController@adminLogin');
-Route::post('/register/admin', 'Auth\RegisterController@createAdmin');
-
-Route::view('/home', 'user.home')->middleware('auth');
-Route::view('/admin', 'admin.admin');
 
 Route::group(['middleware' => ['auth']], function(){
+    
+    Route::get('/home', 'HomeController@index')->name('home');
+    
+    
+    //↓管理者ページ
+    Route::get('/login/admin', 'Auth\LoginController@showAdminLoginForm');
+    Route::get('/register/admin', 'Auth\RegisterController@showAdminRegisterForm');
+    
+    Route::post('/login/admin', 'Auth\LoginController@adminLogin');
+    Route::post('/register/admin', 'Auth\RegisterController@createAdmin');
+    
+    Route::view('/home', 'user.home')->middleware('auth');
+    Route::view('/admin', 'admin.admin');
 
 
     // 管理者マイページ
@@ -59,7 +60,11 @@ Route::group(['middleware' => ['auth']], function(){
     Route::group(['prefix' => 'post'],function(){
         Route::get('/post_music',[MusicController::class, 'postMusic'])->name('post.music');
         Route::post('/post_music',[MusicController::class, 'postComplite'])->name('post.complite');
+
     });
+    // 曲の編集画面
+    Route::get('/music_edit',[MusicController::class, 'editMusic'])->name('edit.music');
+    Route::get('/music',[MusicController::class, 'editMusicComplite'])->name('edit.compmusic');
 });
 
 

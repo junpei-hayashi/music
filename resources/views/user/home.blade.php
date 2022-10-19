@@ -1,6 +1,7 @@
 @extends('layouts.general')
 
 @section('content')
+
 <!-- ここから全体 -->
 <div class="top-page">
 
@@ -27,8 +28,10 @@
     <!-- ダッシュボード -->
 
     <!-- ↓共通topページ -->
- 
+    
 
-    <!-- ↑共通topページ -->
+        
+        <!-- ↑共通topページ -->
+      
 </div>
 @endsection

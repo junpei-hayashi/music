@@ -76,6 +76,15 @@
                                     </a>
                                 </div>
 
+                                <!-- 曲の編集画面へ -->
+                                <div class='d-flex justify-content-center mt-3'>
+                                    <a href="{{ route('edit.music',['id' => Auth::user()->id]) }}">
+                                
+                                        <button class='btn btn-secondary mx-5'>曲を編集する</button>
+                                                                    <!-- ↑マージン左右5pxずらしている -->
+                                    </a>
+                                </div>
+
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">

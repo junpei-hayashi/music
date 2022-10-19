@@ -9,7 +9,7 @@
 @endif
 <!-- 画像の変更を行ったらここにフラッシュメッセージが出る -->
 <p>マイページ</p>
-    <p>名前:{{ $my_user->name }}</p>
+    <p>名前:{{$my_user->name}}</p>
     <p>メールアドレス:{{ $my_user->email }}</p>
     <p>プロフィール画像:{{ $my_user->user_image }}</p>
 
@@ -56,7 +56,5 @@
 
         
     </div>
-
-
 
 @endsection

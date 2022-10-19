@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
+use Log;
 use App\User;
 use App\Artist;
 use App\Music;
@@ -121,8 +122,8 @@ class My_pageController extends Controller
 
     public function artist_update(Request $request)
     {        
-        $id = Auth::id();
-        $user = DB::table('users')->find($id);
+        $id = Auth::id();//ログインしているユーザーのIDを取得
+        $user = DB::table('users')->find($id);//そのユーザーのIDに基づいたUserテーブルのリレーション
         return view('artist.artist_up', ['my_user' => $user]); 
     }
 
@@ -130,27 +131,47 @@ class My_pageController extends Controller
 
     public function editGeneral(Request $request)
     {        
-        $inputs=$request->validate([
-            'name'=>'required|max:255',
-            'email'=>'required|max:255',
-            'tel'=>'required|max:255',
-            'user_image'=>'required|max:255'
-        ]);
+        try {
+            DB::beginTransaction();
 
-        $user=new User();
-        $user->name=$inputs['name'];
-        $user->email=$inputs['email'];
-        $user->tel=$inputs['tel'];
-        $user->id=auth()->user()->id;
+            $inputs=$request->validate([
+                'name'=>'required|string|max:255',
+                'email'=>'required', 'string', 'email', 'max:255', 'unique:users',
+                'tel'=>'nullable|numeric',
+            ]);
+            
+            $id = Auth::id();
+            $user = User::find($id);
 
-        if(request('user_image')) {
-            $name=request()->file('user_image')->getClientOriginalName();
-            $file=request()->file('user_image')->move('storage/images,$name');
-            $user->user_image=$name;
+            $user->name=$inputs['name'];
+            $user->email=$inputs['email'];
+            $user->tel=$inputs['tel'];
+            $image=$user->user_image;
+
+            if($request->hasFile('user_image')) {
+                $photo_path = $request->file('user_image')->store('public/top_file');
+                $image = basename($photo_path);
+            }
+            DB::table('users')
+            ->where('id', $id)
+            ->update([
+                'user_image' => $image,
+                'name' => $user->name,
+                'email' => $user->email,
+                'tel' => $user->tel,
+            ]);
+
+            DB::commit();
+            return view('user.general_mypage',['my_user' => $user])->with('message','変更をしました');
+            // return back()->with('message','変更をしました');
+
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());//エラーメッセージを出力してくれる
+            DB::rollback();//コミットしなかった処理を無かったことにする。
+            session()->flash('message', '更新が失敗しました');
         }
 
-        $user->save();
-        return back()->with('message','変更をしました');
-        
     }
+    
+
 }

@@ -16,27 +16,23 @@
         </div>
     @endif
 
-    @if(session('message'))
-        <div class="alert alert-success">{{session('message')}}</div>
-    @endif
-
     <!-- /my_page2 -->
     <form action="{{route('edit.general')}}" method="post" enctype='multipart/form-data'> 
     <!-- <form method="POST" action="{{route('post.complite')}}" enctype="multipart/form-data"> web.phpにポストで送る -->
     @csrf
         <div>
             <label for="name">名前</label>
-            <input type="text" name="name" value="{{old('name')}}">
+            <input type="text" name="name" value="{{$my_user->name}}">
         </div>
 
         <div>
             <label for="email">メールアドレス</label>
-            <input type="text" name="email" value="{{old('email')}}">
+            <input type="text" name="email" value="{{$my_user->email}}">
         </div>
 
         <div>
             <label for="tel">電話番号</label>
-            <input type="text" name="tel" value="{{old('tel')}}">
+            <input type="text" name="tel" value="{{$my_user->tel}}">
         </div>
 
         <div>

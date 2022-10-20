@@ -22,8 +22,8 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth']], function(){
     
-    Route::get('/home', 'HomeController@index')->name('home');
     
+    Route::get('/home', 'HomeController@index')->name('home');
     
     //↓管理者ページ
     Route::get('/login/admin', 'Auth\LoginController@showAdminLoginForm');
@@ -32,8 +32,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/login/admin', 'Auth\LoginController@adminLogin');
     Route::post('/register/admin', 'Auth\RegisterController@createAdmin');
     
-    Route::view('/home', 'user.home')->middleware('auth');
-    Route::view('/admin', 'admin.admin');
+    // Route::view('/home', 'user.home')->middleware('auth');
+    Route::view('/admin', 'admin.admin');//ここ気をつけて
 
 
     // 管理者マイページ

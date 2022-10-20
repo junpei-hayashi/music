@@ -36,12 +36,22 @@ class HomeController extends Controller
      */
     public function index()
     {     
+
+        $musics=DB::table('musics')->leftjoin('artists','musics.artist_id','=','artists.user_id')->orderBy('musics.id','desc')->get();
+        $artists=Artist::all();
+        $user=Auth::user();       
+        return view('user.home',[
+            'musics' => $musics,
+            'user' => $user,
+            'artist' => $artists
+        ]);
+
         // $musics = Music::orderBy('id','desc');
         // $artists = Artist::all();
         // $user = Auth::user();       
         // return view('home',compact('musics', 'user', 'artists'));
        
-        return view('home');
+        // return view('home');
     }
 
 }

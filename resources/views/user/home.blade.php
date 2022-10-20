@@ -28,6 +28,41 @@
     <!-- ダッシュボード -->
 
     <!-- ↓共通topページ -->
+    @foreach($musics as $music)  
+    <div class="container-fluid mt-20" Style="margin-left:-10px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="media flex-wrap w-100 align-items-center">
+                            <div class="text-muted small ml-3">
+                                <div>
+                                    <strong>
+                                        <img src="{{ asset('/storage/top_file') }}/{{ $music->music_image }}" alt="">
+                                    </strong>
+                                </div>
+                                <audio controls controlslist="nodownload" >
+                                    <source src="{{ asset('/storage/music_file') }}/{{ $music->sound_source }}" type="audio/mp3">
+                                    <source src="{{ asset('/storage/music_file') }}/{{ $music->sound_source }}" type="audio/wav">
+                                </audio>
+                            </div>
+                            <div class="media-body ml-3"> {{$music->music_title}}
+                                <div class="text-muted small"> {{$music->artist_name}} </div>
+                            </div>
+                            <div class="text-muted small ml-3">
+                                <div>投稿日</div>
+                                <div><strong> {{$music->created_at}} </strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p>{{$music->music_detail}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
     
 
         

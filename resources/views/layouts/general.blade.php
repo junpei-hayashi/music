@@ -12,11 +12,13 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/like.js') }}" defer></script>
+    <script src="{{ asset('js/follow.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
@@ -32,15 +34,24 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    ssss
+                <a class="navbar-brand" href="{{ url('/home') }}">
+                    Penet
                     <!-- {{ config('app.name', 'Laravel') }} -->
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-
+                <div class="d-flex justify-content-end">
+                    <form action="{{route('search.musics')}}" method="post" class="row mb-3">
+                        @csrf
+                        <select class="form-select" aria-label="Default select example" name="jenre">
+                            <option value="pop">pop</option>
+                            <option value="rock">rock</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">検索</button>
+                    </form>
+                </div>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->

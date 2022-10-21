@@ -57,25 +57,58 @@ class RegistrationController extends Controller
         $artist -> save();
 
         return redirect('/');
-
-
-        // $types = new User;
-        
-        // $types -> type_id = 1;
-        
-        // $artist = new Artist;
-
-        // $columns = ['artist_name', 'artist_detail','artist_image'];
-        // foreach($columns as $column) {
-        //     $artist->$column = $request->$column;
-        // }
-
-        // Auth::user()->artist()->save($artist);
-
-        // return redirect('/');
-
-
     }
+
+    // only()の引数内のメソッドはログイン時のみ有効
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified'])->only(['like', 'unlike']);
+    }
+
+    public function like(Request $request)
+    {
+        $user_id = Auth::user()->id; //1.ログインユーザーのid取得
+        $music_id = $request->music_id; //2.投稿idの取得
+        $already_liked = Like::where('user_id', $user_id)->where('music_id', $music_id)->first(); //3.
+
+        if (!$already_liked) { //もしこのユーザーがこの投稿にまだいいねしてなかったら
+            $like = new Like; //4.Likeクラスのインスタンスを作成
+            $like->music_id = $music_id; //Likeインスタンスにmusic_id,user_idをセット
+            $like->user_id = $user_id;
+            $like->save();
+        } else { //もしこのユーザーがこの投稿に既にいいねしてたらdelete
+            Like::where('music_id', $music_id)->where('user_id', $user_id)->delete();
+        }
+        //5.この投稿の最新の総いいね数を取得
+        $music_likes_count = Music::withCount('likes')->findOrFail($music_id)->likes_count;
+        $param = [
+            'music_likes_count' => $music_likes_count,
+        ];
+        return response()->json($param); //6.JSONデータをjQueryに返す
+    }
+
+    public function follow(Request $request)
+    {
+        $user_id = Auth::user()->id; //1.ログインユーザーのid取得
+        $music_id = $request->artist_id; //2.投稿idの取得
+        $already_followd = Follow::where('user_id', $user_id)->where('artist_id', $artist_id)->first(); //3.
+
+        if (!$already_followd) { //もしこのユーザーがこの投稿にまだいいねしてなかったら
+            $follow = new Follow; //4.followクラスのインスタンスを作成
+            $follow->artist_id = $artist_id; //followインスタンスにartist_id,user_idをセット
+            $follow->user_id = $user_id;
+            $follow->save();
+        } else { //もしこのユーザーがこの投稿に既にいいねしてたらdelete
+            Follw::where('artist_id', $artist_id)->where('user_id', $user_id)->delete();
+        }
+        //5.この投稿の最新の総いいね数を取得
+        $artist_follows_count = Artist::withCount('follows')->findOrFail($artist_id)->follows_count;
+        $param = [
+            'artist_follows_count' => $artist_follows_count,
+        ];
+        return response()->json($param); //6.JSONデータをjQueryに返す
+    }
+   
     
     public function index()
     {

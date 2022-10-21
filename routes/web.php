@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth']], function(){
     
     
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::post('/home/search', 'HomeController@index')->name('search.musics');
     
     //↓管理者ページ
     Route::get('/login/admin', 'Auth\LoginController@showAdminLoginForm');
@@ -56,6 +57,10 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/create_artist',[RegistrationController::class, 'createArtistForm'])->name('create.artist');
     Route::post('/create_artist',[RegistrationController::class, 'createArtist']);
 
+
+    //アーティスト詳細ページ
+    Route::get('/artist_detail/{id}',[DisplayController::class, 'artistDetail'])->name('artist.detail');
+
     // 投稿用のページ:投稿用のルート
     Route::group(['prefix' => 'post'],function(){
         Route::get('/post_music',[MusicController::class, 'postMusic'])->name('post.music');
@@ -65,6 +70,15 @@ Route::group(['middleware' => ['auth']], function(){
     // 曲の編集画面
     Route::get('/music_edit',[MusicController::class, 'editMusic'])->name('edit.music');
     Route::get('/music',[MusicController::class, 'editMusicComplite'])->name('edit.compmusic');
+
+    //曲の視聴ページ
+    Route::get('/music_detail/{id}',[MusicController::class, 'musicDetail'])->name('music.detail');
+
+    // いいね機能のルーティング
+    Route::post('/like', 'RegistrationController@like')->name('musics.like');
+
+    //フォロー機能のルーティング
+    Route::post('/follow', 'RegistrationController@follow')->name('artists.follow');
 });
 
 

@@ -34,17 +34,44 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {     
-
-        $musics=DB::table('musics')->leftjoin('artists','musics.artist_id','=','artists.user_id')->orderBy('musics.id','desc')->get();
+        if($request->isMethod('post')){
+            $musics=DB::table('musics')
+            ->leftjoin('artists','musics.artist_id','=','artists.id')
+            ->where('jenre',$request->jenre)
+            ->orderBy('musics.id','desc')
+            ->get();
+        }else{
+            $musics=DB::table('musics')
+            ->join('artists','musics.artist_id','=','artists.id')
+            ->orderBy('musics.id','desc')
+            ->get();
+        }
         $artists=Artist::all();
-        $user=Auth::user();       
-        return view('user.home',[
-            'musics' => $musics,
-            'user' => $user,
-            'artist' => $artists
-        ]);
+        $user=Auth::user();
+
+        // ここから書き足し
+        $type_id = \Auth::user()->type_id;  
+        if($type_id === 1) {
+            return view('artist.home2',[
+                'musics' => $musics,
+                'user' => $user,
+                'artist' => $artists
+            ]);
+        }else{
+            return view('user.home',[
+                'musics' => $musics,
+                'user' => $user,
+                'artist' => $artists
+            ]);
+        }
+            // return view('user.home',[
+            //     'musics' => $musics,
+            //     'user' => $user,
+            //     'artist' => $artists
+            // ]);
+        
 
         // $musics = Music::orderBy('id','desc');
         // $artists = Artist::all();

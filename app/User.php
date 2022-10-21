@@ -7,6 +7,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Music;
 use App\Models\Artist;
+use App\Models\Like;
+use App\Models\Follow;
+
 
 class User extends Authenticatable
 {
@@ -44,6 +47,16 @@ class User extends Authenticatable
     }
 
     public function musics() {
-        return $this->hasMany('Music::class');//ユーザーから見て曲のテーブルは1対多になる
+        return $this->hasMany(Music::class);//ユーザーから見て曲のテーブルは1対多になる
+    }
+
+    //↓いいね機能
+    public function likes() {
+        return $this->hasMany(Like::class);
+    }
+
+     //↓フォロー機能
+     public function follows() {
+        return $this->hasMany(Follow::class);
     }
 }

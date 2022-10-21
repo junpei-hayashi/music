@@ -71,10 +71,14 @@ class MusicController extends Controller
     // 曲の編集
     public function editMusic(Request $request)
     {
-        $musics = Music::orderBy('id','desc');
-        $artists = Artist::all();
-        $user = Auth::user();       
-        return view('post.music_edit',compact('musics', 'user', 'artists'));
+        $musics=DB::table('musics')->leftjoin('artists','musics.artist_id','=','artists.user_id')->orderBy('musics.id','desc')->get();
+        $artists=Artist::all();
+        $user=Auth::user();       
+        return view('post.music_edit',[
+            'musics' => $musics,
+            'user' => $user,
+            'artist' => $artists
+        ]);     
     }
     public function editMusicComplite(Request $request)
     {
@@ -109,4 +113,28 @@ class MusicController extends Controller
         // return view('user.general_mypage')->with('message','投稿をしました');
         return back()->with('message','投稿をしました');
     }
+
+    // 曲の視聴
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified'])->only(['likeMusic', 'unlikeMusic']);
+    }
+    // 曲の視聴ページへ
+    public function musicDetail($id)
+    {
+        $musics=DB::table('musics')->leftjoin('artists','musics.artist_id','=','artists.user_id')->orderBy('musics.id','desc')->first();
+        $artists=Artist::all();
+        $user=Auth::user();    
+        $item = Music::withCount('likes')->where('id',$id)->first();
+        $review = new Music;
+        $bool = $review->isLikedBy($user->id);
+        return view('post.music_detail',[
+            'musics' => $musics,
+            'user' => $user,
+            'artist' => $artists,
+            'item' => $item,
+            'bool' => $bool
+        ]);   
+    }
+    
 }

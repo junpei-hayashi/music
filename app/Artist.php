@@ -20,4 +20,15 @@ class Artist extends Model
         return $this->hasMany('Music::class');//ユーザーから見て曲のテーブルは1対多になる
     }
 
+    public function follows()
+    {
+        return $this->hasMany(Follow::class);
+    }
+    //後でViewで使う、フォローされているかを判定するメソッド。
+    public function isFollowedBy($id): bool {
+        return Follow::where('user_id', $id)
+        ->where('artist_id', $this->id)
+        ->first() !==null;
+    }
+
 }

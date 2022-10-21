@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateData;
+use App\Http\Requests\CreateType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Log;
 use App\User;
 use App\Artist;
 use App\Music;
@@ -13,6 +19,23 @@ use App\Type;
 
 class DisplayController extends Controller
 {
+
+    public function artistDetail($id)
+    {
+        $musics=DB::table('musics')->leftjoin('artists','musics.artist_id','=','artists.user_id')->orderBy('musics.id','desc')->first();
+        $artists=Artist::all();
+        $user=Auth::user();
+        $item = Artist::withCount('follows')->where('id',$id)->first();
+        $review = new Artist;
+        $bool = $review->isFollowedBy($user->id);       
+        return view('artist.artist_detail',[
+            'musics' => $musics,
+            'user' => $user,
+            'artist' => $artists,
+            'item' => $item,
+            'bool' => $bool
+        ]);   
+    }
     /**
      * Display a listing of the resource.
      *

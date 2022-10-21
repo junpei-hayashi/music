@@ -28,12 +28,14 @@
     <div class='d-flex justify-content-center seting'>
 
         <!-- ここからtopに戻る -->
-        <div class='d-flex justify-content-center artist'>
-            <a href="">
-                <button class='btn btn-secondary mx-5'>TOPに戻る</button>
-                                            <!-- ↑マージン左右5pxずらしている -->
-            </a>
-        </div>
+        <form action="{{route('home')}}">
+            <div class='d-flex justify-content-center artist'>
+                <a href="">
+                    <button class='btn btn-secondary mx-5'>TOPに戻る</button>
+                                                <!-- ↑マージン左右5pxずらしている -->
+                </a>
+            </div>
+        </form>
         <!-- ここまでtopに戻る -->
 
         <!-- ここから編集 -->

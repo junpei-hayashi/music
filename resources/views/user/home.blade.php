@@ -4,7 +4,6 @@
 
 <!-- ここから全体 -->
 <div class="top-page">
-
     <!-- 全体の画像 -->
     <div class="topimage-music">
         <img src="{{ asset('image/musichome.jpeg') }}" alt="トップイメージ"> 
@@ -27,6 +26,7 @@
     </div>
     <!-- ダッシュボード -->
 
+
     <!-- ↓共通topページ -->
     @foreach($musics as $music)  
     <div class="container-fluid mt-20" Style="margin-left:-10px;">
@@ -37,17 +37,22 @@
                         <div class="media flex-wrap w-100 align-items-center">
                             <div class="text-muted small ml-3">
                                 <div>
-                                    <strong>
+                                    <a href="{{ route('music.detail', ['id' => $music->id])}}">
                                         <img src="{{ asset('/storage/top_file') }}/{{ $music->music_image }}" alt="">
-                                    </strong>
+                                    </a>
                                 </div>
                                 <audio controls controlslist="nodownload" >
                                     <source src="{{ asset('/storage/music_file') }}/{{ $music->sound_source }}" type="audio/mp3">
                                     <source src="{{ asset('/storage/music_file') }}/{{ $music->sound_source }}" type="audio/wav">
                                 </audio>
                             </div>
-                            <div class="media-body ml-3"> {{$music->music_title}}
-                                <div class="text-muted small"> {{$music->artist_name}} </div>
+                            <div class="media-body ml-3">
+                                <a href="{{ route('music.detail', ['id' => $music->id])}}"> 
+                                    {{$music->music_title}}
+                                </a>
+                                <a href="{{ route('artist.detail',['id' => Auth::user()->id])}}">
+                                    <div class="text-muted small"> {{$music->artist_name}} </div>
+                                </a>
                             </div>
                             <div class="text-muted small ml-3">
                                 <div>投稿日</div>

@@ -2,6 +2,9 @@
 
 @section('content')
 <!-- ここから全体 -->
+@if (session('loginmessage'))
+    <p>{{ session('loginmessage') }}</p>
+@endif
 <div class="top-page">
     <!-- 全体の画像 -->
     <div class="topimage-music">
@@ -41,8 +44,8 @@
                                     </a>
                                 </div>
                                 <audio controls controlslist="nodownload" >
-                                    <source src="{{ asset('/storage/music_file') }}/{{ $music->sound_source }}" type="audio/mp3">
-                                    <source src="{{ asset('/storage/music_file') }}/{{ $music->sound_source }}" type="audio/wav">
+                                    <source src="{{ $music->sound_source }}" type="audio/mp3">
+                                    <source src="{{ $music->sound_source }}" type="audio/wav">
                                 </audio>
                             </div>
                             <div class="media-body ml-3">

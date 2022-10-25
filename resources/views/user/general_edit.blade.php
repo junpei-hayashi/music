@@ -56,4 +56,5 @@
     
         <button type="submit">変更を保存</button>
     </form>
+    <button type="button" onClick="history.back()">戻る</button>
 @endsection

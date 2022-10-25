@@ -32,8 +32,8 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    ssss
+                <a class="navbar-brand" href="{{ url('/home') }}">
+                    Penet
                     <!-- {{ config('app.name', 'Laravel') }} -->
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -47,21 +47,42 @@
                     <ul class="navbar-nav mr-auto">
 
                     </ul>
+                    <div class="d-flex justify-content-end">
+                    </div>
+                        <form action="{{route('search.musics')}}" method="post" class="row mb-3">
+                            @csrf
+                            <select class="form-select" aria-label="Default select example" name="jenre">
+                                <option value="default"></option>
+                                <option value="R&B">R&B</option>
+                                <option value="clubmusic">クラブミュージック</option>
+                                <option value="jazz">ジャズ</option>
+                                <option value="classic">クラシック</option>
+                                <option value="hiphop">ヒップホップ</option>
+                                <option value="rock">ロック</option>
+                                <option value="pops">ポップス</option>
+                                <option value="edm">EDM</option>
+                                <option value="electro">エレクトロ</option>
+                                <option value="reggae">レゲエ</option>
+                                <option value="country">カントリー</option>
+                                <option value="inst">インストゥルメンタル</option>
+                                <option value="hevey">ヘヴィ・メタル</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary">検索</button>
+                        </form>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                        <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                Hi There <span class="caret"></span>
+                                メニュー <span class="caret"></span>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
                                 <!-- マイページへ -->
                                 <div class='d-flex justify-content-center mt-3'>
-                                    <a href="{{ route('id.show',['id' => Auth::user()->id]) }}">
-                                
+                                    <a href="{{ route('artist.mypage',['id' => Auth::user()->id]) }}">
                                         <button class='btn btn-secondary mx-5'>マイページ</button>
                                                                     <!-- ↑マージン左右5pxずらしている -->
                                     </a>
@@ -76,10 +97,18 @@
                                     </a>
                                 </div>
 
+                                <!-- 曲の一覧画面へ -->
+                                <div class='d-flex justify-content-center mt-3'>
+                                    <a href="{{ route('music.list',['id' => Auth::user()->id]) }}">
+                                        <button class='btn btn-secondary mx-5'>MySong一覧</button>
+                                                                    <!-- ↑マージン左右5pxずらしている -->
+                                    </a>
+                                </div>
+
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                                    {{ __('ログアウト') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

@@ -150,6 +150,7 @@ return [
         'email' => 'メールアドレス',
         'tel' => '電話番号',
         'password' => 'パスワード',
+        'artist_name' => 'アーティスト名'
     ],
 
 ];

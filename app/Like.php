@@ -24,3 +24,6 @@ class Like extends Model
         return $this->belongsTo(User::class);
     }
 }
+
+// ↓いいねした曲を表示させる
+// Music::join('likes','musics.id','likes.music_id')->where('likes.user_id',Auth($id))->get;

@@ -1,4 +1,4 @@
-@extends('layouts.general')
+@extends('layouts.artist')
 
 @section('content')
 <h1>新規投稿</h1>
@@ -16,8 +16,8 @@
         </div>
     @endif
 
-    @if(session('message'))
-        <div class="alert alert-success">{{session('message')}}</div>
+    @if(session('postmessage'))
+        <div class="alert alert-success">{{session('postmessage')}}</div>
     @endif
 
     <form method="post" action="{{route('post.complite')}}" enctype="multipart/form-data"> <!-- web.phpにポストで送る -->
@@ -41,7 +41,23 @@
 
         <div>
             <label for="jenre">ジャンル</label>
-            <input type="text" name="jenre" value="{{old('jenre')}}">
+            <!-- <input type="text" name="jenre" value="{{old('jenre')}}"> -->
+            <select class="form-select" aria-label="Default select example" name="jenre" value="{{old('jenre')}}">
+                <option value="default"></option>
+                <option value="R&B">R&B</option>
+                <option value="clubmusic">クラブミュージック</option>
+                <option value="jazz">ジャズ</option>
+                <option value="classic">クラシック</option>
+                <option value="hiphop">ヒップホップ</option>
+                <option value="rock">ロック</option>
+                <option value="pops">ポップス</option>
+                <option value="edm">EDM</option>
+                <option value="electro">エレクトロ</option>
+                <option value="reggae">レゲエ</option>
+                <option value="country">カントリー</option>
+                <option value="inst">インストゥルメンタル</option>
+                <option value="hevey">ヘヴィ・メタル</option>
+            </select>
         </div>
 
         <div>
@@ -51,4 +67,5 @@
 
         <button type="submit">投稿を保存</button>
     </form>
+    <button type="button" onClick="history.back()">戻る</button>
 @endsection

@@ -6,6 +6,8 @@ use App\Http\Requests\CreateData;
 use App\Http\Requests\CreateType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Artist;
 use App\Music;
@@ -56,7 +58,9 @@ class RegistrationController extends Controller
 
         $artist -> save();
 
-        return redirect('/');
+        return view('artist.artistup_comp');     
+
+        // return redirect('/');
     }
 
     // only()の引数内のメソッドはログイン時のみ有効
@@ -90,16 +94,16 @@ class RegistrationController extends Controller
     public function follow(Request $request)
     {
         $user_id = Auth::user()->id; //1.ログインユーザーのid取得
-        $music_id = $request->artist_id; //2.投稿idの取得
+        $artist_id = $request->artist_id; //2.投稿idの取得
         $already_followd = Follow::where('user_id', $user_id)->where('artist_id', $artist_id)->first(); //3.
 
-        if (!$already_followd) { //もしこのユーザーがこの投稿にまだいいねしてなかったら
+        if (!$already_followd) { //もしこのユーザーがこの投稿にまだフォローしてなかったら
             $follow = new Follow; //4.followクラスのインスタンスを作成
             $follow->artist_id = $artist_id; //followインスタンスにartist_id,user_idをセット
             $follow->user_id = $user_id;
             $follow->save();
-        } else { //もしこのユーザーがこの投稿に既にいいねしてたらdelete
-            Follw::where('artist_id', $artist_id)->where('user_id', $user_id)->delete();
+        } else { //もしこのユーザーがこの投稿に既にフォローしてたらdelete
+            Follow::where('artist_id', $artist_id)->where('user_id', $user_id)->delete();
         }
         //5.この投稿の最新の総いいね数を取得
         $artist_follows_count = Artist::withCount('follows')->findOrFail($artist_id)->follows_count;

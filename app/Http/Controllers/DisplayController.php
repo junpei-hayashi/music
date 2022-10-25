@@ -27,13 +27,76 @@ class DisplayController extends Controller
         $user=Auth::user();
         $item = Artist::withCount('follows')->where('id',$id)->first();
         $review = new Artist;
-        $bool = $review->isFollowedBy($user->id);       
-        return view('artist.artist_detail',[
+        $bool = $review->isFollowedBy($user->id);   
+        
+        $type = User::find(Auth::id());
+        if($type->type_id === 1){
+            return view('artist.artist_detail2',[
+                'musics' => $musics,
+                'user' => $user,
+                'artist' => $artists,
+                'item' => $item,
+                'bool' => $bool
+            ]);   
+        }else{
+            return view('artist.artist_detail',[
+                'musics' => $musics,
+                'user' => $user,
+                'artist' => $artists,
+                'item' => $item,
+                'bool' => $bool
+            ]);   
+        }
+    }
+    public function artistMypage($id)
+    {
+        $artists=Artist::find($id);   
+        return view('artist.artist_mypage',[
+            'artist' => $artists,
+        ]);   
+    }
+
+    public function musicList($id)
+    {
+        
+        // foreach($musics as $m){
+            //     $str=str_replace('public/','',$m->sound_source);
+            //     $m->sound_source = Storage::disk('public')->url($str);
+            // }
+
+            $user = Auth::user()->id;
+            $musics = Music::where('artist_id',$user)
+            ->orderBy('musics.id','desc')
+            ->get();
+            
+            return view('post.postmusic_list',[
+                'musics' => $musics,
+            ]);
+
+    }
+
+    public function artistEdit($id)
+    {
+        // $musics=DB::table('musics')->leftjoin('artists','musics.artist_id','=','artists.user_id')->orderBy('musics.id','desc')->first();
+        // $artists=Artist::all();
+        // $user=Auth::user(); 
+        // return view('artist.artist_edit',[
+        //     'musics' => $musics,
+        //     'user' => $user,
+        //     'artist' => $artists,
+        // ]);   
+        $musics=DB::table('musics')
+            ->leftjoin('artists','musics.artist_id','=','artists.user_id')
+            ->orderBy('musics.id','desc')
+            ->first();
+        $artists=Artist::all();
+        $user=Auth::user();
+             
+        return view('artist.artist_edit',[
             'musics' => $musics,
             'user' => $user,
             'artist' => $artists,
-            'item' => $item,
-            'bool' => $bool
+        
         ]);   
     }
     /**

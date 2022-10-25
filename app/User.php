@@ -5,10 +5,11 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Music;
-use App\Models\Artist;
-use App\Models\Like;
-use App\Models\Follow;
+use App\Music;
+use App\Artist;
+use App\Like;
+use App\Follow;
+use App\Notifications\PasswordResetUserNotification;
 
 
 class User extends Authenticatable
@@ -59,4 +60,9 @@ class User extends Authenticatable
      public function follows() {
         return $this->hasMany(Follow::class);
     }
+    //パスワードリセット
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new PasswordResetUserNotification($token));    
+    }   
 }

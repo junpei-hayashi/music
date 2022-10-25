@@ -60,7 +60,16 @@ class My_pageController extends Controller
     {
         $id = Auth::id();
         $user = DB::table('users')->find($id);
-        return view('user.general_mypage', ['my_user' => $user]);
+        // $likes=Like::all();
+        // $likes = User::find(Auth::user()->id)->likes;
+        return view('user.general_mypage', [
+            'my_user' => $user,
+            // 'like' => $likes
+        ]);
+
+        // $id = Auth::id();
+        // $user = DB::table('users')->find($id);  
+        // return view('user.general_mypage', ['my_user' => $user]);
     }
 
     /**
@@ -162,14 +171,43 @@ class My_pageController extends Controller
             ]);
 
             DB::commit();
-            return view('user.general_mypage',['my_user' => $user])->with('message','変更をしました');
-            // return back()->with('message','変更をしました');
+            // return view('user.general_mypage',['my_user' => $user])->with('message','変更をしました');
+            return back()->with('message','変更をしました');
 
         } catch (\Exception $e) {
             Log::info($e->getMessage());//エラーメッセージを出力してくれる
             DB::rollback();//コミットしなかった処理を無かったことにする。
             session()->flash('message', '更新が失敗しました');
         }
+
+
+    }
+    public function editArtist(Request $request)
+    {        
+        
+
+            $inputs=$request->validate([
+                'artist_name'=>'required|string|max:255',
+                'artist_detail'=>'nullable|string',
+            ]);
+            
+            $id = Auth::id();
+            $artist = Artist::find($id);
+            $artist->artist_name=$inputs['artist_name'];
+            $artist->artist_detail=$inputs['artist_detail'];
+            
+
+
+            if($request->hasFile('artist_image')) {
+                $photo_path = $request->file('artist_image')->store('public/top_file');
+                $image = basename($photo_path);
+            }else{
+                $image=null;
+            }
+            $artist->artist_image=$image;
+            $artist->save();
+            return redirect()->route('artist.mypage', ['id' => $id])->with('message','変更をしました');
+
 
     }
     

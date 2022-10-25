@@ -4,7 +4,7 @@ $(function () {
     let followReviewId; //変数を宣言（なんでここで？）
     follow.on('click', function () { //onはイベントハンドラー
       let $this = $(this); //this=イベントの発火した要素＝iタグを代入
-      followReviewId = $this.data('review-id'); //iタグに仕込んだdata-review-idの値を取得
+      followReviewId = $this.data('follow-id'); //iタグに仕込んだdata-review-idの値を取得
       //ajax処理スタート
       $.ajax({
         headers: { //HTTPヘッダ情報をヘッダ名と値のマップで記述

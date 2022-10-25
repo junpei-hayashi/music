@@ -3,19 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\CreateData;
-use App\Http\Requests\CreateType;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Log;
 use App\User;
 use App\Artist;
 use App\Music;
-use App\Like;
-use App\Comment;
-use App\Follow;
-use App\Type;
 
 class HomeController extends Controller
 {
@@ -35,50 +28,29 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(Request $request)
-    {     
+    {
         if($request->isMethod('post')){
-            $musics=DB::table('musics')
-            ->leftjoin('artists','musics.artist_id','=','artists.id')
+            $musics = Music::orderby('created_at','desc')
             ->where('jenre',$request->jenre)
-            ->orderBy('musics.id','desc')
             ->get();
         }else{
-            $musics=DB::table('musics')
-            ->join('artists','musics.artist_id','=','artists.id')
-            ->orderBy('musics.id','desc')
-            ->get();
+            $musics = Music::orderby('created_at','desc')->get();
         }
-        $artists=Artist::all();
-        $user=Auth::user();
+        foreach($musics as $m){
+            $str=str_replace('public/','',$m->sound_source);
+            $m->sound_source = Storage::disk('public')->url($str);
+        }
 
-        // ここから書き足し
-        $type_id = \Auth::user()->type_id;  
-        if($type_id === 1) {
-            return view('artist.home2',[
-                'musics' => $musics,
-                'user' => $user,
-                'artist' => $artists
+        $type = User::find(Auth::id());
+        if($type->type_id === 0){
+            return view('user/home',[
+                'musics' => $musics
             ]);
         }else{
-            return view('user.home',[
-                'musics' => $musics,
-                'user' => $user,
-                'artist' => $artists
+            return view('artist/home2',[
+                'musics' => $musics
             ]);
         }
-            // return view('user.home',[
-            //     'musics' => $musics,
-            //     'user' => $user,
-            //     'artist' => $artists
-            // ]);
         
-
-        // $musics = Music::orderBy('id','desc');
-        // $artists = Artist::all();
-        // $user = Auth::user();       
-        // return view('home',compact('musics', 'user', 'artists'));
-       
-        // return view('home');
     }
-
 }

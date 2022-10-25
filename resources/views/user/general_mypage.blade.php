@@ -24,6 +24,8 @@
 
     @endif
 
+  
+
     <!-- ここから各種変更 -->
     <div class='d-flex justify-content-center seting'>
 

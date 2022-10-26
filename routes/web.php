@@ -25,6 +25,9 @@ Route::group(['middleware' => ['auth']], function(){
     
     Route::get('/home', 'HomeController@index')->name('home');
     Route::post('/home/search', 'HomeController@index')->name('search.musics');
+
+    // ログアウト
+    Route::get('/logout', 'Auth\LoginController@logout');
     
     //↓管理者ページ
     Route::get('/login/admin', 'Auth\LoginController@showAdminLoginForm');

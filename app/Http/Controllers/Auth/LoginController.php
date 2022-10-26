@@ -63,5 +63,9 @@ class LoginController extends Controller
         return back()->withInput($request->only('name', 'remember'));
     }
 
+    public function loggedOut(\Illuminate\Http\Request $request) 
+    {
+        return redirect('login');
+    }
     
 }

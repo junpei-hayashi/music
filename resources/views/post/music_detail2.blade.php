@@ -8,7 +8,8 @@
 
 <div>
     artist_name
-    <a href="{{ route('artist.detail', ['id' => Auth::user()->id])}}">     <!-- ここ変だよ -->
+    <a href="{{ route('artist.detail', ['id' =>$musics->id])}}">     
+    <!-- <a href="{{ route('artist.detail', ['id' => Auth::user()->id])}}">      -->
         {{$musics->artist_name}}
     </a>
 </div>
@@ -67,6 +68,8 @@
     </audio>
 
 </div>
+
+<button type="button" onClick="history.back()">戻る</button>
 
 @endsection
 

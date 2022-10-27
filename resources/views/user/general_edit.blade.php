@@ -1,7 +1,7 @@
 @extends('layouts.general')
 
 @section('content')
-<h1>マイページ<</h1>
+<h1>マイページ</h1>
     @if($errors->any())
         <div class="alert alert-danger">
             <ul>

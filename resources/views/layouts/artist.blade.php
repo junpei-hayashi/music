@@ -22,6 +22,45 @@
 
     <!-- CSS -->
     <style>
+        .topimage-music {
+            text-align:  center;    /* 文字中央寄せ */
+            /* padding:  150px;        余白指定 */
+            padding:  10%;
+            border: solid 2px;      /* 枠線指定 */
+            position: relative;
+            background-image: url(image/musichome.jpeg);
+        }
+
+        .myimage-music {
+            text-align:  center;    /* 文字中央寄せ */
+            /* padding:  150px;        余白指定 */
+            padding:  0%;
+            border: solid 2px;      /* 枠線指定 */
+            position: relative;
+            background-image: url(image/musichome.jpeg);
+        }
+
+        .top-font{
+            position: absolute;
+            top: 4%;
+            left:45%;
+            font-size:5vw;
+            color: white;
+            padding:0;
+            margin:0;
+            -webkit-text-stroke: 1px black; /* webkitのベンダープレフィックス */
+            text-stroke: 1px black;    
+
+        }
+        .post-music{
+            position: absolute;
+            top: 10%;
+            left:45%;
+            padding:0;
+            margin: 0;;
+
+        }
+
 
     </style>
 

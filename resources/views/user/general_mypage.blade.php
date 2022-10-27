@@ -8,23 +8,37 @@
     <p>{{ session('message') }}</p>
 @endif
 <!-- 画像の変更を行ったらここにフラッシュメッセージが出る -->
-<p>マイページ</p>
-    <p>名前:{{$my_user->name}}</p>
-    <p>メールアドレス:{{ $my_user->email }}</p>
-    <p>プロフィール画像:{{ $my_user->user_image }}</p>
+<!-- <div class="top-page"> -->
 
-    @if (Session::has('top_image_pass'))
-        <img src="{{ asset('/storage/top_file') }}/{{ session('top_image_pass') }}" alt=""> 
+        
 
-    @elseif ($my_user->user_image == "/def_img/noimage.png")
-        <p><img src="{{ $my_user->user_image }}" alt=""> </p>
+<div class="top-mypagedetail">
+    <div class='d-flex justify-content-center mypage'>
+        <div class='profile'>
+            <div class='container-fluid mt-50'>
+                <h1>マイページ</h1>
+            </div>
+            <p>名前:{{$my_user->name}}</p>
+            <p>メールアドレス:{{ $my_user->email }}</p>
+            <p>プロフィール画像:{{ $my_user->user_image }}</p>
 
-    @else
-        <p><img src="{{ asset('/storage/top_file') }}/{{ $my_user->user_image }}" alt=""> </p>
+            @if (Session::has('top_image_pass'))
+                <img src="{{ asset('/storage/top_file') }}/{{ session('top_image_pass') }}" alt=""> 
 
-    @endif
+            @elseif ($my_user->user_image == "/def_img/noimage.png")
+                <p><img src="{{ $my_user->user_image }}" alt=""> </p>
 
-  
+            @else
+                <p><img src="{{ asset('/storage/top_file') }}/{{ $my_user->user_image }}" alt=""> </p>
+
+            @endif
+        </div>
+
+        <div class='like'>
+            
+        </div>
+    </div>
+
 
     <!-- ここから各種変更 -->
     <div class='d-flex justify-content-center seting'>
@@ -58,7 +72,7 @@
         </div>
         <!-- ここまでアーティスト登録 -->
 
-        
-    </div>
+    </div>  
 
+<!-- </div> -->
 @endsection

@@ -22,7 +22,10 @@ class DisplayController extends Controller
 
     public function artistDetail($id)
     {
-        $musics=DB::table('musics')->leftjoin('artists','musics.artist_id','=','artists.user_id')->orderBy('musics.id','desc')->first();
+        $musics=DB::table('musics')
+            ->leftjoin('artists','musics.artist_id','=','artists.user_id')
+            ->orderBy('musics.id','desc')
+            ->first();
         $artists=Artist::all();
         $user=Auth::user();
         $item = Artist::withCount('follows')->where('id',$id)->first();
@@ -48,6 +51,7 @@ class DisplayController extends Controller
             ]);   
         }
     }
+    
     public function artistMypage($id)
     {
         $artists=Artist::find($id);   
